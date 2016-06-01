@@ -5,48 +5,52 @@ using namespace std;
 /**
 	\class Class of move
 */
-class move {
-	move* Next;
-	string Data;
+class Queue {
 public:
-	move() : Next(nullptr), Data("") {};
-	void push(string data);
-	void get();
-	void pop();
-	~move() { if (Next != nullptr) delete Next; }
-} Move;
+	Queue(int _data) : data(_data), next(nullptr) {};
+	~Queue() {};
 
-/// \fn Adding element
-void move::push(string data) {
-	if (Next == nullptr)
-		if (Data != "")
-			Next = new move();
-		else {
-			Data = data;
-			return;
+	int		data;
+	Queue	*next;
+};
+
+class QueueController {
+public:
+	QueueController() : head(nullptr), tail(nullptr) {};
+	~QueueController() {};
+
+	Queue	*head;
+	Queue	*tail;
+	
+	/// \fn Adding element
+	void	add(int data) {
+		Queue *newElement = new Queue(data);
+		if (tail != nullptr) {
+			tail->next = newElement;
+			tail = tail->next;
 		}
-		Next->push(Data);
-		Data = data;
-}
-
-/// \fn Getting element
-void move::get() {
-	if (Next == nullptr) {
-		cout << Data << endl;
+		else
+			head = tail = newElement;
 		return;
-	}
-	Next->get();
-}
+	};
 
-/// \fn Deleting element
-void move::pop() {
-	if (Next == nullptr) {
-		Data = "";
+	/// \fn Deleting element
+	void	del(void) {
+		if (head != nullptr) {
+			Queue *deleted = head;
+			head = head->next;
+			delete deleted;
+		}
+		else
+			tail = nullptr;
 		return;
-	}
-	else
-		Next->pop();
-}
+	};
+	
+	/// \fn Getting element
+	int	get(void) {
+		return head->data;
+	};
+};
 
 /**
 	\fn Main function of application
